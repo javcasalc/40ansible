@@ -41,6 +41,7 @@ EXAMPLES = '''
   strategy: debug
   vars:
    host: "192.168.40.8"
+   ssh_port: 22
    username: "admin"
    password: ""
    vdom: "root"
@@ -604,12 +605,13 @@ def fortigate_config_del(data):
 
 def fortigate_config_ssh(data):
     host = data['host']
+    ssh_port = data['ssh_port']
     username = data['username']
     password = data['password']
     cmds = data['commands']
 
     try:
-        out, err = fos.ssh(cmds, host, username, password=password)
+        out, err = fos.ssh(cmds, host, username, password=password, ssh_port=ssh_port)
         meta = {"out": out, "err": err, }
         return False, True, meta
     except:
@@ -787,6 +789,7 @@ def fortigate_config_upload(data):
 def main():
     fields = {
         "host": {"required": True, "type": "str"},
+        "ssh_port": {"required": False, "type": "int", "default": "22"},
         "password": {"required": False, "type": "str", "no_log": True},
         "username": {"required": True, "type": "str"},
         "description": {"required": False, "type": "str"},
